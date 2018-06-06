@@ -1,31 +1,29 @@
-# FSAL-S3 - A NFS-Ganesha FSAL for Amazon S3 (v0.1)
+# FSAL_S3 - A NFS-Ganesha FSAL for Amazon S3 (v0.1)
 
-## NFS-Ganesha with FSAL-S3 uses Amazon S3 as a backed for NFS.
+## NFS-Ganesha with FSAL_S3 uses Amazon S3 as a backed for NFS.
 
 ### Quick start
-- Get NFS-Ganesha source code (git clone --recursive https://github.com/nfs-ganesha/nfs-ganesha)
+- Obtain NFS-Ganesha source code (git clone --recursive https://github.com/nfs-ganesha/nfs-ganesha)
 - Install libs3 (sudo yum install libs3-devel)
-- Get FSAL-S3 source code (git clone https://github.com/ajaynair/FSAL_S3.git)
+- Obtain FSAL_S3 source code (git clone https://github.com/ajaynair/FSAL_S3.git)
 - cd FSAL_S3
 - make
 - sudo make install
-- Modify NFS-Ganesha configuration file to use FSAL-S3
+- Modify NFS-Ganesha configuration file to use FSAL_S3
 - Run nfs-ganesha (sudo ganesha.nfsd)
 
-### Contributors:
-Ujjwal Lanjewar, Ajay Nair, Ashay Shirwadkar
+### Contributors
+- Developers: Ajay Nair, Ashay Shirwadkar
+- Reviewer: Ujjwal Lanjewar
 
-### FSAL-S3 Overview
+### FSAL_S3 Overview
 
-1. Each NFS filetype has a corresponding Amazon S3 object to store its data.
-   - Regular file data is stored as it is to an object correspoding to it.
-   - Directory entries are stored as a list of dirents(Explained below) in an object corresponding to it.
+#### File Representation
+A file in NFS namespace, is represented by a single Amazon S3 object. File data is completely stored in the corresponding object. Only regular files are supported in this version. 
 
-##### Note that the current implementation only supports regular files and directories
-
-A directory entry in an object is stored in string format as:\
-`<magic-string><separator><filename><separator><object-id><separator><magic-string><separator>`
-
+#### Directory Representation
+Directory in the NFS nnamespace, also has a corresponding Amazon S3 Object. Directory entries list is stored in the object as a string, in this format:\
+`<magic-string><separator><filename><separator><object-id><separator><magic-string><separator>`\
 Where:
   - magic-string is `"s3magic"`
   - separator is `'@'`
